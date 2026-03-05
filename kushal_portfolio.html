@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kushal Kumar S — VFX & Animation | DARKUSHION STUDIOS</title>
+<meta name="description" content="Kushal Kumar S — VFX & Animation Student. Founder of DARKUSHION STUDIOS.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+
+<style>
+
+/* =====================================================
+   VARIABLES
+   ===================================================== */
+:root {
+  --black:      #070809;
+  --dark:       #0C0E12;
+  --dark2:      #111318;
+  --charcoal:   #1C1F26;
+  --muted:      #6B7280;
+  --silver:     #9CA3AF;
+  --light:      #D1D5DB;
+  --white:      #F3F4F6;
+  --pure:       #FFFFFF;
+  --accent:     #E8EEF8;
+  --crimson:    #7C1D2A;
+  --cyan-dim:   rgba(180,210,230,0.35);
+
+  --f-display:  'Bebas Neue', sans-serif;
+  --f-body:     'Montserrat', sans-serif;
+
+  --ease-cin:   cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-soft:  cubic-bezier(0.4, 0, 0.2, 1);
+
+  --gutter:     clamp(24px, 6vw, 96px);
+  --sec-pad:    clamp(72px, 9vw, 130px);
+}
+
+/* =====================================================
+   RESET
+   ===================================================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; }
+
+body {
+  background: var(--black);
+  color: var(--silver);
+  font-family: var(--f-body);
+  font-weight: 300;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  font-family: var(--f-display);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  font-weight: 400;
+}
+
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; }
+
+::-webkit-scrollbar { width: 2px; }
+::-webkit-scrollbar-track { background: var(--black); }
+::-webkit-scrollbar-thumb { background: var(--charcoal); }
+
+/* Subtle film grain */
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  opacity: 0.028;
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: overlay;
+}
+
+/* =====================================================
+   NAV
+   ===================================================== */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 900;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 22px var(--gutter);
+  background: linear-gradient(to bottom, rgba(7,8,9,0.92) 0%, transparent 100%);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.nav-brand {
+  font-family: var(--f-display);
+  font-size: 0.95rem;
+  letter-spacing: 5px;
+  color: var(--white);
+  line-height: 1.1;
+}
+.nav-brand small {
+  display: block;
+  font-family: var(--f-body);
+  font-size: 0.5rem;
+  letter-spacing: 0.3em;
+  color: var(--silver);
+  font-weight: 400;
+  margin-top: 3px;
+  text-transform: uppercase;
+  opacity: 0.55;
+}
+
+.nav-links { display: flex; gap: 36px; }
+.nav-links a {
+  font-family: var(--f-body);
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--silver);
+  opacity: 0.6;
+  transition: opacity 0.25s, color 0.25s;
+  position: relative;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute; bottom: -4px; left: 0;
+  width: 0; height: 1px;
+  background: var(--white);
+  transition: width 0.3s var(--ease-soft);
+}
+.nav-links a:hover { opacity: 1; color: var(--white); }
+.nav-links a:hover::after { width: 100%; }
+
+.nav-toggle {
+  display: none;
+  flex-direction: column; gap: 5px;
+  cursor: pointer; z-index: 1000;
+}
+.nav-toggle span {
+  display: block; width: 22px; height: 1px;
+  background: var(--silver); transition: all 0.3s;
+}
+
+/* =====================================================
+   CINEMATIC INTRO
+   Full-screen scroll-snap container.
+   6 slides × 100vh.
+   scroll-snap-type: y mandatory = one snap per scroll.
+   ===================================================== */
+#intro {
+  height: 100vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;          /* Firefox */
+  -ms-overflow-style: none;       /* IE/Edge */
+}
+#intro::-webkit-scrollbar { display: none; }
+
+/* ── Shared slide base ── */
+.slide {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  height: 100vh;
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--black);
+}
+
+/* Subtle dark gradient bg per slide */
+.slide::before {
+  content: '';
+  position: absolute; inset: 0; z-index: 0;
+  background:
+    radial-gradient(ellipse 100% 70% at 50% 50%, #0D1018 0%, #070809 65%, #040506 100%),
+    radial-gradient(ellipse 80% 50% at 75% 20%, rgba(90,20,30,0.18) 0%, transparent 55%);
+}
+
+/* Minimal star field — restrained, not overdone */
+.slide::after {
+  content: '';
+  position: absolute; inset: 0; z-index: 0;
+  background:
+    radial-gradient(1px 1px at  9% 14%, rgba(255,255,255,0.45) 0%, transparent 100%),
+    radial-gradient(1px 1px at 24%  7%, rgba(255,255,255,0.3)  0%, transparent 100%),
+    radial-gradient(1px 1px at 43% 21%, rgba(255,255,255,0.4)  0%, transparent 100%),
+    radial-gradient(1px 1px at 58%  5%, rgba(255,255,255,0.25) 0%, transparent 100%),
+    radial-gradient(1px 1px at 74% 17%, rgba(255,255,255,0.45) 0%, transparent 100%),
+    radial-gradient(1px 1px at 89% 10%, rgba(255,255,255,0.3)  0%, transparent 100%),
+    radial-gradient(1px 1px at 13% 46%, rgba(255,255,255,0.35) 0%, transparent 100%),
+    radial-gradient(1px 1px at 31% 59%, rgba(255,255,255,0.28) 0%, transparent 100%),
+    radial-gradient(1px 1px at 51% 53%, rgba(255,255,255,0.22) 0%, transparent 100%),
+    radial-gradient(1px 1px at 67% 68%, rgba(255,255,255,0.38) 0%, transparent 100%),
+    radial-gradient(1px 1px at 84% 63%, rgba(255,255,255,0.25) 0%, transparent 100%),
+    radial-gradient(1px 1px at  6% 79%, rgba(255,255,255,0.32) 0%, transparent 100%),
+    radial-gradient(1px 1px at 21% 88%, rgba(255,255,255,0.22) 0%, transparent 100%),
+    radial-gradient(1px 1px at 39% 84%, rgba(255,255,255,0.35) 0%, transparent 100%),
+    radial-gradient(1px 1px at 56% 90%, rgba(255,255,255,0.25) 0%, transparent 100%),
+    radial-gradient(1px 1px at 77% 82%, rgba(255,255,255,0.32) 0%, transparent 100%),
+    radial-gradient(1px 1px at 93% 78%, rgba(255,255,255,0.22) 0%, transparent 100%);
+  opacity: 0.7;
+}
+
+/* Slide content wrapper */
+.slide-content {
+  position: relative; z-index: 2;
+  text-align: center;
+  padding: 0 var(--gutter);
+  width: 100%;
+  max-width: 1100px;
+}
+
+/* ── Core text reveal animation ── */
+@keyframes revealLine {
+  0%   { opacity: 0; transform: translateY(40px); filter: blur(6px); }
+  60%  { filter: blur(0); }
+  100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+
+/* Line label (small caps above) */
+.slide-label {
+  font-family: var(--f-body);
+  font-size: clamp(0.55rem, 1.2vw, 0.65rem);
+  letter-spacing: 0.45em;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: block;
+  margin-bottom: 20px;
+  opacity: 0;
+  animation: revealLine 1s var(--ease-cin) 0.1s both;
+}
+
+/* Primary cinematic line */
+.slide-line {
+  font-family: var(--f-display);
+  font-size: clamp(2rem, 6.5vw, 6.5rem);
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: var(--white);
+  line-height: 1.02;
+  opacity: 0;
+  animation: revealLine 1.1s var(--ease-cin) 0.25s both;
+}
+
+/* Secondary body line */
+.slide-sub {
+  font-family: var(--f-body);
+  font-style: italic;
+  font-size: clamp(0.85rem, 1.8vw, 1.25rem);
+  font-weight: 300;
+  color: var(--silver);
+  opacity: 0;
+  margin-top: 20px;
+  letter-spacing: 0.03em;
+  animation: revealLine 1s var(--ease-cin) 0.5s both;
+}
+
+/* ── SLIDE 1 "This Is Not A Portfolio" ── */
+.slide-1 .slide-line {
+  font-size: clamp(2rem, 5.5vw, 5.5rem);
+  color: var(--light);
+  letter-spacing: 6px;
+}
+
+/* ── SLIDE 2 "Not Every World Is Built In Light" ── */
+.slide-2 .slide-line {
+  font-size: clamp(1.8rem, 5vw, 5rem);
+  color: var(--silver);
+  letter-spacing: 4px;
+  font-family: var(--f-body);
+  font-weight: 300;
+  font-style: italic;
+  text-transform: none;
+  letter-spacing: 0.04em;
+  animation-delay: 0.2s;
+}
+
+/* ── SLIDES 3 & 4: word-by-word reveal ──
+   We split each phrase into individual word spans.
+   Each .word animates with increasing delay.             */
+.word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  margin-right: 0.28em;
+}
+/* The actual text sits inside, slides up */
+.word-inner {
+  display: block;
+  opacity: 0;
+  transform: translateY(100%);
+  animation: wordReveal 0.75s var(--ease-cin) both;
+}
+@keyframes wordReveal {
+  0%   { opacity: 0; transform: translateY(100%); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Word delays — slide 3 "I Don't Just Create Visuals" */
+.slide-3 .w1  { animation-delay: 0.2s; }
+.slide-3 .w2  { animation-delay: 0.38s; }
+.slide-3 .w3  { animation-delay: 0.56s; }
+.slide-3 .w4  { animation-delay: 0.74s; }
+.slide-3 .w5  { animation-delay: 0.92s; }
+.slide-3 .sub { animation-delay: 1.15s; opacity: 0; animation: revealLine 0.9s var(--ease-cin) 1.15s both; margin-top: 22px; }
+
+/* Word delays — slide 4 "I Build Worlds That Breathe In Darkness" */
+.slide-4 .w1  { animation-delay: 0.18s; }
+.slide-4 .w2  { animation-delay: 0.34s; }
+.slide-4 .w3  { animation-delay: 0.50s; }
+.slide-4 .w4  { animation-delay: 0.66s; }
+.slide-4 .w5  { animation-delay: 0.82s; }
+.slide-4 .w6  { animation-delay: 0.98s; }
+.slide-4 .w7  { animation-delay: 1.14s; }
+
+/* Word-line wrapper for slide 3 & 4 */
+.word-line {
+  font-family: var(--f-display);
+  font-size: clamp(2rem, 6vw, 6rem);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--white);
+  line-height: 1.08;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 0;
+}
+
+/* ── Scroll indicator ── */
+.scroll-hint {
+  position: absolute; bottom: 28px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  opacity: 0;
+  animation: revealLine 0.9s var(--ease-cin) 1.2s both;
+}
+.scroll-hint-text {
+  font-family: var(--f-body);
+  font-size: 0.48rem; letter-spacing: 0.38em; text-transform: uppercase;
+  color: var(--muted);
+}
+.scroll-tick {
+  width: 1px; height: 44px;
+  background: linear-gradient(to bottom, var(--muted), transparent);
+  animation: tickPulse 2s ease-in-out infinite;
+}
+@keyframes tickPulse {
+  0%,100% { opacity: 0.25; transform: scaleY(1); }
+  50%      { opacity: 0.7;  transform: scaleY(1.1); }
+}
+
+/* =====================================================
+   SLIDE 5 — NAME REVEAL
+   Pseudo-3D depth using perspective + layered shadow.
+   No glitch. No flash. Clean and cinematic.
+   ===================================================== */
+.slide-5 {
+  background: var(--black);
+}
+.slide-5::before {
+  background:
+    radial-gradient(ellipse 90% 70% at 50% 55%, #0A0C10 0%, #060708 60%, #040506 100%),
+    radial-gradient(ellipse 70% 45% at 18% 25%, rgba(80,18,26,0.12) 0%, transparent 55%);
+}
+
+.name-reveal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Thin rule above/below name */
+.name-rule {
+  width: min(480px, 80vw); height: 1px;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.12) 30%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.12) 70%, transparent);
+  opacity: 0;
+  animation: revealLine 0.8s var(--ease-cin) 0.6s both;
+}
+
+/* The name itself — perspective + letter-spacing animation */
+@keyframes nameReveal {
+  0% {
+    opacity: 0;
+    transform: perspective(600px) rotateX(8deg) translateY(30px);
+    letter-spacing: 20px;
+    filter: blur(8px);
+  }
+  60% { filter: blur(0); }
+  100% {
+    opacity: 1;
+    transform: perspective(600px) rotateX(0deg) translateY(0);
+    letter-spacing: clamp(8px, 2vw, 20px);
+    filter: blur(0);
+  }
+}
+
+.hero-name {
+  font-family: var(--f-display);
+  font-size: clamp(3rem, 10vw, 10rem);
+  letter-spacing: clamp(8px, 2vw, 20px);
+  text-transform: uppercase;
+  color: var(--white);
+  line-height: 1;
+  opacity: 0;
+  animation: nameReveal 1.8s var(--ease-cin) 0.2s both;
+  /* Layered shadow = depth without glow overdose */
+  text-shadow:
+    0 1px 0 rgba(255,255,255,0.06),
+    2px  2px 0 rgba(60,20,28,0.8),
+    4px  4px 0 rgba(50,16,22,0.65),
+    6px  6px 0 rgba(40,12,18,0.5),
+    8px  8px 0 rgba(28,8,12,0.35),
+    10px 10px 0 rgba(16,4,8,0.2),
+    0 2px 40px rgba(0,0,0,0.5);
+}
+
+.hero-tagline {
+  font-family: var(--f-body);
+  font-size: clamp(0.58rem, 1.3vw, 0.72rem);
+  letter-spacing: 0.38em;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: 0;
+  animation: revealLine 0.9s var(--ease-cin) 0.9s both;
+}
+.hero-studio {
+  font-family: var(--f-body);
+  font-size: clamp(0.55rem, 1.1vw, 0.66rem);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--silver);
+  opacity: 0;
+  animation: revealLine 0.9s var(--ease-cin) 1.05s both;
+}
+
+.cta-wrap {
+  margin-top: 42px;
+  opacity: 0;
+  animation: revealLine 1s var(--ease-cin) 1.25s both;
+}
+
+.btn-enter {
+  display: inline-block;
+  font-family: var(--f-body);
+  font-size: 0.6rem; font-weight: 600;
+  letter-spacing: 0.38em; text-transform: uppercase;
+  color: var(--white);
+  border: 1px solid rgba(255,255,255,0.22);
+  padding: 17px 54px;
+  position: relative; overflow: hidden;
+  transition: color 0.4s var(--ease-soft), border-color 0.4s, box-shadow 0.4s;
+  cursor: pointer;
+}
+.btn-enter::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: var(--white);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.4s var(--ease-cin);
+}
+.btn-enter:hover { color: var(--black); border-color: var(--white); box-shadow: 0 0 30px rgba(255,255,255,0.1); }
+.btn-enter:hover::before { transform: scaleX(1); }
+.btn-enter span { position: relative; z-index: 1; }
+
+/* =====================================================
+   DIVIDER
+   ===================================================== */
+.divider {
+  width: 100%; height: 1px;
+  background: linear-gradient(to right,
+    transparent,
+    rgba(255,255,255,0.06) 30%,
+    rgba(255,255,255,0.1) 50%,
+    rgba(255,255,255,0.06) 70%,
+    transparent);
+}
+
+/* =====================================================
+   SECTION COMMONS
+   ===================================================== */
+.sec {
+  padding: var(--sec-pad) var(--gutter);
+  position: relative; overflow: hidden;
+}
+.sec--alt { background: var(--dark); }
+
+.sec-label {
+  font-family: var(--f-body); font-size: 0.55rem;
+  letter-spacing: 0.42em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 16px;
+  display: flex; align-items: center; gap: 14px;
+}
+.sec-label::after {
+  content: ''; flex: 1; max-width: 64px; height: 1px;
+  background: linear-gradient(to right, rgba(255,255,255,0.12), transparent);
+}
+
+.sec-title {
+  font-family: var(--f-display);
+  font-size: clamp(2rem, 5vw, 4.5rem);
+  letter-spacing: 4px;
+  color: var(--white); line-height: 1.04;
+  margin-bottom: 28px;
+}
+.sec-title em {
+  font-family: var(--f-body); font-style: italic;
+  font-weight: 300; font-size: 0.55em;
+  color: var(--silver); text-transform: none;
+  letter-spacing: 0.04em; display: block;
+  margin-top: 4px;
+}
+
+/* =====================================================
+   REVEAL SYSTEM
+   ===================================================== */
+.reveal { opacity: 0; transform: translateY(36px); animation: rv 0.95s var(--ease-cin) forwards; }
+.reveal:nth-child(1) { animation-delay: 0.25s; }
+.reveal:nth-child(2) { animation-delay: 0.5s; }
+.reveal:nth-child(3) { animation-delay: 0.75s; }
+.reveal:nth-child(4) { animation-delay: 0.95s; }
+.reveal:nth-child(5) { animation-delay: 1.15s; }
+.reveal:nth-child(6) { animation-delay: 1.35s; }
+.d1 { animation-delay: 0.2s  !important; }
+.d2 { animation-delay: 0.45s !important; }
+.d3 { animation-delay: 0.7s  !important; }
+.d4 { animation-delay: 0.95s !important; }
+.d5 { animation-delay: 1.2s  !important; }
+@keyframes rv { to { opacity: 1; transform: translateY(0); } }
+
+/* =====================================================
+   ABOUT
+   ===================================================== */
+.about-body { max-width: 700px; }
+.about-body p {
+  font-size: clamp(0.9rem, 1.4vw, 1.02rem);
+  line-height: 1.95; color: var(--silver);
+  margin-bottom: 24px; font-weight: 300;
+}
+.about-body p:last-of-type { margin-bottom: 0; }
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 10px; margin: 40px 0;
+}
+.skill-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 13px 16px;
+  border: 1px solid rgba(255,255,255,0.05);
+  background: rgba(255,255,255,0.02);
+  transition: border-color 0.3s, background 0.3s;
+  position: relative;
+}
+.skill-item::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px;
+  background: rgba(255,255,255,0.2); opacity: 0; transition: opacity 0.3s;
+}
+.skill-item:hover { border-color: rgba(255,255,255,0.1); background: rgba(255,255,255,0.03); }
+.skill-item:hover::before { opacity: 1; }
+.skill-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--silver); flex-shrink: 0; }
+.skill-item span { font-size: 0.72rem; letter-spacing: 0.1em; color: var(--silver); text-transform: uppercase; }
+
+.about-links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 40px; }
+.about-link {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-size: 0.58rem; font-weight: 600; letter-spacing: 0.24em; text-transform: uppercase;
+  color: var(--silver); border: 1px solid rgba(255,255,255,0.1);
+  padding: 12px 24px; transition: all 0.3s;
+}
+.about-link:hover { color: var(--white); border-color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.03); }
+
+/* =====================================================
+   PORTFOLIO — EMPTY STATE
+   ===================================================== */
+.empty-state {
+  margin-top: 52px; padding: 72px 32px;
+  border: 1px solid rgba(255,255,255,0.05);
+  background: rgba(255,255,255,0.015);
+  text-align: center; position: relative; overflow: hidden;
+}
+.empty-state::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 55% 55% at 50% 50%, rgba(80,20,28,0.08) 0%, transparent 70%);
+}
+.es-title { font-family: var(--f-display); font-size: clamp(1.2rem, 2.5vw, 2rem); letter-spacing: 6px; color: var(--white); opacity: 0.25; position: relative; z-index: 1; margin-bottom: 12px; }
+.es-sub   { font-size: 0.68rem; letter-spacing: 0.18em; color: var(--muted); text-transform: uppercase; position: relative; z-index: 1; }
+.c { position: absolute; width: 18px; height: 18px; }
+.c-tl { top: 12px; left: 12px; border-top: 1px solid rgba(255,255,255,0.12); border-left: 1px solid rgba(255,255,255,0.12); }
+.c-tr { top: 12px; right: 12px; border-top: 1px solid rgba(255,255,255,0.12); border-right: 1px solid rgba(255,255,255,0.12); }
+.c-bl { bottom: 12px; left: 12px; border-bottom: 1px solid rgba(255,255,255,0.12); border-left: 1px solid rgba(255,255,255,0.12); }
+.c-br { bottom: 12px; right: 12px; border-bottom: 1px solid rgba(255,255,255,0.12); border-right: 1px solid rgba(255,255,255,0.12); }
+
+.port-cta { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 44px; }
+.btn-line {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-size: 0.58rem; font-weight: 600; letter-spacing: 0.26em; text-transform: uppercase;
+  color: var(--silver); border: 1px solid rgba(255,255,255,0.1);
+  padding: 13px 26px; transition: all 0.3s;
+}
+.btn-line:hover { color: var(--white); border-color: rgba(255,255,255,0.22); background: rgba(255,255,255,0.025); }
+.bi { width: 15px; height: 15px; }
+
+/* =====================================================
+   DARKUSHION STUDIOS
+   ===================================================== */
+#studios { position: relative; }
+#studios::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 50% at 88% 50%, rgba(80,18,28,0.12) 0%, transparent 58%);
+  pointer-events: none;
+}
+
+.studios-head { text-align: center; margin-bottom: 64px; }
+
+.studios-name {
+  display: block;
+  font-family: var(--f-display);
+  line-height: 0.9;
+  letter-spacing: 12px;
+  text-transform: uppercase;
+}
+.sn1 { font-size: clamp(2.5rem, 7.5vw, 7rem); color: var(--white); }
+.sn2 { font-size: clamp(2.5rem, 7.5vw, 7rem); color: rgba(255,255,255,0.45); }
+
+.studios-tagline {
+  font-family: var(--f-body); font-style: italic;
+  font-size: clamp(0.82rem, 1.6vw, 1.05rem); font-weight: 300;
+  color: var(--muted); margin-top: 20px; letter-spacing: 0.06em;
+}
+.studios-rule { width: 1px; height: 48px; background: linear-gradient(to bottom, rgba(255,255,255,0.15), transparent); margin: 24px auto; }
+.studios-desc {
+  font-size: clamp(0.85rem, 1.3vw, 0.98rem); line-height: 1.9;
+  color: var(--silver); opacity: 0.65; max-width: 600px; margin: 0 auto;
+}
+
+.social-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-width: 720px; margin: 0 auto; }
+.social-card {
+  position: relative; padding: 32px 28px;
+  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.015);
+  overflow: hidden; transition: border-color 0.35s, transform 0.35s;
+}
+.social-card::after {
+  content: ''; position: absolute; inset: -1px;
+  border: 1px solid rgba(255,255,255,0.12);
+  opacity: 0; transition: opacity 0.35s;
+}
+.social-card:hover { border-color: rgba(255,255,255,0.1); transform: translateY(-3px); }
+.social-card:hover::after { opacity: 1; }
+.sc-icon { width: 38px; height: 38px; margin-bottom: 16px; position: relative; z-index: 1; }
+.social-card h3 { font-family: var(--f-body); font-size: 0.62rem; letter-spacing: 0.26em; text-transform: uppercase; color: var(--white); font-weight: 600; margin-bottom: 10px; }
+.social-card p  { font-size: 0.77rem; line-height: 1.75; color: var(--silver); opacity: 0.55; margin-bottom: 20px; }
+.social-card a  { display: inline-block; font-size: 0.56rem; font-weight: 600; letter-spacing: 0.26em; text-transform: uppercase; color: var(--silver); border: 1px solid rgba(255,255,255,0.12); padding: 9px 20px; transition: all 0.3s; }
+.social-card a:hover { background: var(--white); color: var(--black); border-color: var(--white); }
+
+/* =====================================================
+   BEHIND THE SHADOWS
+   ===================================================== */
+#archive {
+  background: #060709; position: relative; overflow: hidden;
+}
+#archive::before {
+  content: ''; position: absolute; inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.04) 3px, rgba(0,0,0,0.04) 4px);
+  pointer-events: none;
+}
+
+.archive-layout {
+  position: relative; z-index: 1;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: clamp(40px, 6vw, 96px); align-items: center;
+}
+.archive-text p {
+  font-size: clamp(0.88rem, 1.3vw, 0.98rem); line-height: 1.95;
+  color: var(--silver); opacity: 0.7; margin-bottom: 28px;
+}
+.archive-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 34px; }
+.tag { font-size: 0.53rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); border: 1px solid rgba(255,255,255,0.08); padding: 6px 13px; }
+
+.btn-arch {
+  display: inline-flex; align-items: center; gap: 13px;
+  font-size: 0.58rem; font-weight: 600; letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--light); border: 1px solid rgba(255,255,255,0.14);
+  padding: 15px 32px; transition: all 0.35s; position: relative; overflow: hidden;
+}
+.btn-arch::before { content: ''; position: absolute; inset: 0; background: rgba(255,255,255,0.05); transform: scaleX(0); transform-origin: left; transition: transform 0.35s var(--ease-cin); }
+.btn-arch:hover { border-color: rgba(255,255,255,0.22); }
+.btn-arch:hover::before { transform: scaleX(1); }
+.btn-arch span { position: relative; z-index: 1; }
+
+.archive-panel {
+  height: 440px; border: 1px solid rgba(255,255,255,0.05);
+  position: relative; overflow: hidden;
+  background: linear-gradient(135deg, #0A0B0F 0%, #06070A 100%);
+}
+.ap-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+  background-size: 52px 52px;
+}
+.ap-corner { position: absolute; width: 30px; height: 30px; }
+.ap-tl { top: 12px; left: 12px; border-top: 1px solid rgba(255,255,255,0.1); border-left: 1px solid rgba(255,255,255,0.1); }
+.ap-br { bottom: 12px; right: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); border-right: 1px solid rgba(255,255,255,0.1); }
+
+.ap-center {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  text-align: center; width: 240px;
+}
+.ap-center-label {
+  font-family: var(--f-body); font-size: 0.5rem; letter-spacing: 0.42em;
+  text-transform: uppercase; color: var(--muted); opacity: 0.7;
+  display: block; margin-bottom: 12px;
+}
+.ap-center-name {
+  font-family: var(--f-body); font-size: 0.88rem; font-style: italic; font-weight: 300;
+  color: var(--light); opacity: 0.28; letter-spacing: 0.1em;
+}
+
+.ap-rings {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%,-50%); opacity: 0.1;
+}
+
+/* =====================================================
+   CONNECT
+   ===================================================== */
+#connect { position: relative; }
+#connect::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 40% at 50% 110%, rgba(60,15,22,0.1) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.connect-layout {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: clamp(40px, 6vw, 96px); align-items: start;
+  position: relative; z-index: 1;
+}
+
+.contact-links { display: flex; flex-direction: column; gap: 10px; }
+.contact-item {
+  display: flex; align-items: center; gap: 16px;
+  padding: 15px 16px;
+  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.015);
+  transition: all 0.3s; text-decoration: none;
+}
+.contact-item:hover { border-color: rgba(255,255,255,0.12); background: rgba(255,255,255,0.028); transform: translateX(5px); }
+.ci-icon { width: 30px; height: 30px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.ci-info h4 { font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--white); font-weight: 600; margin-bottom: 3px; }
+.ci-info p  { font-size: 0.55rem; letter-spacing: 0.1em; color: var(--muted); }
+.ci-arrow   { margin-left: auto; font-size: 0.75rem; color: var(--silver); opacity: 0; transition: opacity 0.3s, transform 0.3s; }
+.contact-item:hover .ci-arrow { opacity: 1; transform: translateX(3px); }
+
+.contact-form { display: flex; flex-direction: column; gap: 16px; }
+.form-group label {
+  font-size: 0.52rem; letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--muted); display: block; margin-bottom: 7px;
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%; background: rgba(255,255,255,0.025);
+  border: 1px solid rgba(255,255,255,0.07);
+  color: var(--white); font-family: var(--f-body); font-size: 0.88rem;
+  padding: 13px 14px; outline: none;
+  transition: border-color 0.3s;
+  appearance: none; -webkit-appearance: none;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus { border-color: rgba(255,255,255,0.18); }
+.form-group select option { background: var(--dark2); color: var(--white); }
+.form-group textarea { resize: vertical; min-height: 110px; line-height: 1.7; }
+.form-group input::placeholder,
+.form-group textarea::placeholder { color: var(--muted); }
+
+.btn-send {
+  align-self: flex-start;
+  display: inline-flex; align-items: center; gap: 11px;
+  font-family: var(--f-body); font-size: 0.58rem; font-weight: 600;
+  letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--black); background: var(--white);
+  border: none; padding: 15px 36px; cursor: pointer;
+  transition: all 0.3s; position: relative; overflow: hidden;
+}
+.btn-send::before { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.08); opacity: 0; transition: opacity 0.3s; }
+.btn-send:hover::before { opacity: 1; }
+.btn-send:hover { box-shadow: 0 0 28px rgba(255,255,255,0.12); transform: translateY(-1px); }
+
+/* =====================================================
+   FOOTER
+   ===================================================== */
+footer {
+  background: var(--dark);
+  padding: 48px var(--gutter) 30px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center;
+}
+.footer-name { font-family: var(--f-display); font-size: clamp(1.4rem, 3vw, 2.5rem); letter-spacing: 10px; color: var(--white); opacity: 0.65; }
+.footer-tag  { font-family: var(--f-body); font-style: italic; font-size: 0.78rem; color: var(--muted); }
+.footer-rule { width: 1px; height: 30px; background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.1), transparent); }
+.footer-copy { font-size: 0.5rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); opacity: 0.5; }
+
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
+@media (max-width: 900px) {
+  .archive-layout, .connect-layout { grid-template-columns: 1fr; }
+  .social-cards { grid-template-columns: 1fr; max-width: 380px; }
+  .archive-panel { height: 240px; }
+}
+
+@media (max-width: 640px) {
+  :root { --gutter: 20px; --sec-pad: 56px; }
+
+  .nav-links {
+    display: none; position: fixed; inset: 0;
+    background: rgba(7,8,9,0.97); flex-direction: column;
+    align-items: center; justify-content: center; gap: 28px;
+    z-index: 800; backdrop-filter: blur(16px);
+  }
+  .nav-links.open { display: flex; }
+  .nav-links a { font-size: 0.82rem; letter-spacing: 0.26em; }
+  .nav-toggle { display: flex; }
+
+  .slide-line { font-size: clamp(1.6rem, 8.5vw, 3rem) !important; }
+  .slide-2 .slide-line { font-size: clamp(1.3rem, 6vw, 2.4rem) !important; }
+  .word-line { font-size: clamp(1.6rem, 8vw, 3rem) !important; }
+  .hero-name { font-size: clamp(2.4rem, 11vw, 4.5rem) !important; }
+
+  .btn-send { align-self: stretch; justify-content: center; }
+  .about-links, .port-cta { flex-direction: column; }
+
+  #intro { height: 100dvh; }
+  .slide { height: 100dvh; min-height: 100dvh; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.1ms !important; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">
+    Kushal Kumar S
+    <small>DARKUSHION STUDIOS</small>
+  </div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about">About</a></li>
+    <li><a href="#portfolio">Work</a></li>
+    <li><a href="#studios">Studios</a></li>
+    <li><a href="#archive">Archive</a></li>
+    <li><a href="#connect">Contact</a></li>
+  </ul>
+  <div class="nav-toggle" id="navToggle"
+       onclick="document.getElementById('navLinks').classList.toggle('open');">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- =====================================================
+     CINEMATIC INTRO
+     6 full-screen slides. scroll-snap-type: y mandatory.
+     One scroll = one section. CSS-only.
+     ===================================================== -->
+<div id="intro">
+
+  <!-- SLIDE 1 — "This Is Not A Portfolio" -->
+  <div class="slide slide-1">
+    <div class="slide-content">
+      <span class="slide-label">Kushal Kumar S</span>
+      <h1 class="slide-line">This Is Not A Portfolio</h1>
+    </div>
+    <div class="scroll-hint">
+      <span class="scroll-hint-text">Scroll</span>
+      <div class="scroll-tick"></div>
+    </div>
+  </div>
+
+  <!-- SLIDE 2 — "Not Every World Is Built In Light" -->
+  <div class="slide slide-2">
+    <div class="slide-content">
+      <h1 class="slide-line">Not Every World Is Built In Light.</h1>
+    </div>
+    <div class="scroll-hint">
+      <span class="scroll-hint-text">Continue</span>
+      <div class="scroll-tick"></div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3 — "I Don't Just Create Visuals" (word by word) -->
+  <div class="slide slide-3">
+    <div class="slide-content">
+      <div class="word-line" aria-label="I Don't Just Create Visuals">
+        <div class="word w1"><span class="word-inner">I</span></div>
+        <div class="word w2"><span class="word-inner">Don't</span></div>
+        <div class="word w3"><span class="word-inner">Just</span></div>
+        <div class="word w4"><span class="word-inner">Create</span></div>
+        <div class="word w5"><span class="word-inner">Visuals</span></div>
+      </div>
+      <p class="slide-sub sub">Every frame is a deliberate act of atmosphere.</p>
+    </div>
+    <div class="scroll-hint">
+      <span class="scroll-hint-text">Continue</span>
+      <div class="scroll-tick"></div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4 — "I Build Worlds That Breathe In Darkness" (word by word) -->
+  <div class="slide slide-4">
+    <div class="slide-content">
+      <div class="word-line" aria-label="I Build Worlds That Breathe In Darkness">
+        <div class="word w1"><span class="word-inner">I</span></div>
+        <div class="word w2"><span class="word-inner">Build</span></div>
+        <div class="word w3"><span class="word-inner">Worlds</span></div>
+        <div class="word w4"><span class="word-inner">That</span></div>
+        <div class="word w5"><span class="word-inner">Breathe</span></div>
+        <div class="word w6"><span class="word-inner">In</span></div>
+        <div class="word w7"><span class="word-inner">Darkness</span></div>
+      </div>
+    </div>
+    <div class="scroll-hint">
+      <span class="scroll-hint-text">Enter</span>
+      <div class="scroll-tick"></div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5 — Name + CTA -->
+  <div class="slide slide-5">
+    <div class="slide-content">
+      <div class="name-reveal">
+        <div class="name-rule"></div>
+        <h1 class="hero-name">Kushal Kumar S</h1>
+        <div class="name-rule"></div>
+        <p class="hero-tagline">VFX &amp; Animation Student &nbsp;·&nbsp; CMR University</p>
+        <p class="hero-studio">Founder &mdash; DARKUSHION STUDIOS</p>
+        <div class="cta-wrap">
+          <a href="#about" class="btn-enter"><span>Enter The Experience</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /intro -->
+
+<!-- =====================================================
+     SITE BODY
+     ===================================================== -->
+
+<div class="divider"></div>
+
+<!-- ABOUT -->
+<div class="sec" id="about">
+  <div class="sec-label reveal d1">The Mind Behind the Shadows</div>
+  <h2 class="sec-title reveal d2">About<br><em>Who I Am</em></h2>
+  <div class="about-body">
+    <p class="reveal d2">
+      I am a VFX and Animation student at CMR University. I am passionate about cinematic storytelling, horror aesthetics, psychological tension, and immersive sci-fi narratives. Every frame I create is a deliberate act of atmosphere.
+    </p>
+    <p class="reveal d3">
+      I founded DARKUSHION STUDIOS as an independent cinematic production identity. I build visual worlds that breathe in shadow. Darkness, in my work, is not absence. It is presence.
+    </p>
+    <p class="reveal d3">
+      If you want to explore my work or connect professionally, visit my profiles linked below.
+    </p>
+
+    <div class="skills-grid">
+      <div class="skill-item reveal"><div class="skill-dot"></div><span>3D Modelling</span></div>
+      <div class="skill-item reveal"><div class="skill-dot"></div><span>Creative Visualization</span></div>
+      <div class="skill-item reveal"><div class="skill-dot"></div><span>Cinematography</span></div>
+      <div class="skill-item reveal"><div class="skill-dot"></div><span>Screenplay &amp; Narrative</span></div>
+      <div class="skill-item reveal"><div class="skill-dot"></div><span>Horror Worldbuilding</span></div>
+      <div class="skill-item reveal"><div class="skill-dot"></div><span>Sci-Fi Aesthetics</span></div>
+    </div>
+
+    <div class="about-links">
+      <a href="https://www.linkedin.com/in/kushal-kumar-s-24b63037b" target="_blank" class="about-link reveal d3">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="3"/><line x1="7" y1="10" x2="7" y2="17"/><line x1="7" y1="7" x2="7" y2="7.01"/><line x1="11" y1="10" x2="11" y2="17"/><path d="M11 13a3 3 0 016 0v4"/></svg>
+        LinkedIn
+      </a>
+      <a href="https://www.instagram.com/darkushion_studios" target="_blank" class="about-link reveal d4">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        DARKUSHION STUDIOS
+      </a>
+      <a href="https://www.instagram.com/darkushion_vfx" target="_blank" class="about-link reveal d4">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        Behind the Shadows
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- PORTFOLIO -->
+<div class="sec sec--alt" id="portfolio">
+  <div class="sec-label reveal d1">Selected Work</div>
+  <h2 class="sec-title reveal d2">Projects<br><em>Coming Soon</em></h2>
+  <div class="empty-state reveal d3">
+    <div class="c c-tl"></div><div class="c c-tr"></div>
+    <div class="c c-bl"></div><div class="c c-br"></div>
+    <p class="es-title">Project Archive</p>
+    <p class="es-sub">Projects will be added manually. No placeholders.</p>
+  </div>
+  <div class="port-cta">
+    <a href="https://www.instagram.com/darkushion_studios?igsh=MTNraDlmcXZxaGRqeA%3D%3D&utm_source=qr" target="_blank" class="btn-line reveal d3">
+      <svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+      View on Instagram
+    </a>
+    <a href="https://www.youtube.com/@DARKUSHIONSTUDIOS" target="_blank" class="btn-line reveal d4">
+      <svg class="bi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 001.46 6.42 29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.41 19.54C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.96A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor" stroke="none"/></svg>
+      Watch on YouTube
+    </a>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- DARKUSHION STUDIOS -->
+<div class="sec" id="studios">
+  <div class="studios-head">
+    <div class="sec-label reveal d1" style="justify-content:center;">Production Identity</div>
+    <span class="studios-name sn1 reveal d2">DARKUSHION</span>
+    <span class="studios-name sn2 reveal d2">STUDIOS</span>
+    <p class="studios-tagline reveal d3">"Where Shadows Tell Stories."</p>
+    <div class="studios-rule reveal d3"></div>
+    <p class="studios-desc reveal d4">DARKUSHION STUDIOS is an independent cinematic production identity focused on horror, mystery, thriller, and sci-fi storytelling. It represents original short films, experimental visuals, and narrative-driven screen experiences that live in the space between shadow and light.</p>
+  </div>
+
+  <div class="social-cards">
+    <div class="social-card reveal d3">
+      <div class="sc-icon">
+        <svg viewBox="0 0 44 44" fill="none"><rect x="5" y="5" width="34" height="34" rx="10" stroke="rgba(255,255,255,0.5)" stroke-width="1.2"/><circle cx="22" cy="22" r="7.5" stroke="rgba(255,255,255,0.5)" stroke-width="1.2"/><circle cx="32" cy="12" r="2" fill="rgba(255,255,255,0.5)"/></svg>
+      </div>
+      <h3>Instagram</h3>
+      <p>Official studio page. Cinematic releases, production stills, and announcements.</p>
+      <a href="https://www.instagram.com/darkushion_studios" target="_blank">Follow Studio →</a>
+    </div>
+    <div class="social-card reveal d4">
+      <div class="sc-icon">
+        <svg viewBox="0 0 44 44" fill="none"><rect x="3" y="9" width="38" height="26" rx="6" stroke="rgba(255,255,255,0.5)" stroke-width="1.2"/><path d="M17.5 15.5 L30 22 L17.5 28.5 Z" fill="rgba(255,255,255,0.5)"/></svg>
+      </div>
+      <h3>YouTube</h3>
+      <p>Full cinematic releases. Short films, visual experiments, and screen experiences.</p>
+      <a href="https://www.youtube.com/@DARKUSHIONSTUDIOS" target="_blank">Watch Now →</a>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- BEHIND THE SHADOWS -->
+<div class="sec" id="archive">
+  <div class="archive-layout">
+    <div class="archive-text">
+      <div class="sec-label reveal d1">Hidden Archive</div>
+      <h2 class="sec-title reveal d2">Behind the<br><em>Shadows</em></h2>
+      <p class="reveal d3">A visual journal of freelance projects, college assignments, personal experiments, VFX breakdowns, and creative explorations. It represents the technical process behind cinematic storytelling. The layers no audience sees.</p>
+      <div class="archive-tags reveal d4">
+        <span class="tag">VFX Breakdowns</span>
+        <span class="tag">3D Process</span>
+        <span class="tag">Concept Art</span>
+        <span class="tag">Freelance Work</span>
+        <span class="tag">Experiments</span>
+        <span class="tag">Behind the Lens</span>
+      </div>
+      <a href="https://www.instagram.com/darkushion_vfx?igsh=djhxcjhvcHY1MHJp&utm_source=qr" target="_blank" class="btn-arch reveal d5">
+        <span>View Process &amp; Portfolio Work</span>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+    </div>
+
+    <div class="archive-panel reveal d2">
+      <div class="ap-grid"></div>
+      <div class="ap-corner ap-tl"></div>
+      <div class="ap-corner ap-br"></div>
+      <div class="ap-rings">
+        <svg width="260" height="260" viewBox="0 0 260 260">
+          <circle cx="130" cy="130" r="118" stroke="rgba(255,255,255,0.6)" stroke-width="0.5" fill="none"/>
+          <circle cx="130" cy="130" r="80"  stroke="rgba(255,255,255,0.6)" stroke-width="0.5" fill="none"/>
+          <circle cx="130" cy="130" r="42"  stroke="rgba(255,255,255,0.6)" stroke-width="0.5" fill="none"/>
+          <line x1="0"   y1="130" x2="260" y2="130" stroke="rgba(255,255,255,0.5)" stroke-width="0.4"/>
+          <line x1="130" y1="0"   x2="130" y2="260" stroke="rgba(255,255,255,0.5)" stroke-width="0.4"/>
+          <circle cx="130" cy="12"  r="2.5" fill="rgba(255,255,255,0.5)"/>
+          <circle cx="130" cy="248" r="2.5" fill="rgba(255,255,255,0.5)"/>
+          <circle cx="12"  cy="130" r="2.5" fill="rgba(255,255,255,0.5)"/>
+          <circle cx="248" cy="130" r="2.5" fill="rgba(255,255,255,0.5)"/>
+        </svg>
+      </div>
+      <div class="ap-center">
+        <span class="ap-center-label">Access Archive</span>
+        <p class="ap-center-name">@darkushion_vfx</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- CONNECT -->
+<div class="sec sec--alt" id="connect">
+  <div class="connect-layout">
+
+    <div class="reveal d1">
+      <div class="sec-label">Get in Touch</div>
+      <h2 class="sec-title">Let's Create<br><em>Something Dark.</em></h2>
+      <div class="contact-links">
+        <a href="https://www.linkedin.com/in/kushal-kumar-s-24b63037b" target="_blank" class="contact-item">
+          <div class="ci-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="3"/><line x1="7" y1="10" x2="7" y2="17"/><line x1="7" y1="7" x2="7" y2="7.01"/><line x1="11" y1="10" x2="11" y2="17"/><path d="M11 13a3 3 0 016 0v4"/></svg></div>
+          <div class="ci-info"><h4>LinkedIn</h4><p>Professional Profile</p></div>
+          <span class="ci-arrow">→</span>
+        </a>
+        <a href="https://www.instagram.com/darkushion_studios" target="_blank" class="contact-item">
+          <div class="ci-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="rgba(255,255,255,0.5)" stroke="none"/></svg></div>
+          <div class="ci-info"><h4>DARKUSHION STUDIOS</h4><p>@darkushion_studios</p></div>
+          <span class="ci-arrow">→</span>
+        </a>
+        <a href="https://www.instagram.com/darkushion_vfx" target="_blank" class="contact-item">
+          <div class="ci-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="rgba(255,255,255,0.5)" stroke="none"/></svg></div>
+          <div class="ci-info"><h4>Behind the Shadows</h4><p>@darkushion_vfx</p></div>
+          <span class="ci-arrow">→</span>
+        </a>
+        <a href="https://www.youtube.com/@DARKUSHIONSTUDIOS" target="_blank" class="contact-item">
+          <div class="ci-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 001.46 6.42 29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.41 19.54C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.96A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="rgba(255,255,255,0.5)" stroke="none"/></svg></div>
+          <div class="ci-info"><h4>YouTube</h4><p>@DARKUSHIONSTUDIOS</p></div>
+          <span class="ci-arrow">→</span>
+        </a>
+        <a href="tel:+916362567832" class="contact-item">
+          <div class="ci-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.4 10.83 19.79 19.79 0 01.34 2.26 2 2 0 012.33.1h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.12 6.12l1.27-.78a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>
+          <div class="ci-info"><h4>Direct Contact</h4><p>+91 6362567832</p></div>
+          <span class="ci-arrow">→</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="contact-form reveal d2">
+      <div class="sec-label" style="margin-bottom:24px;">Send a Message</div>
+      <div class="form-group"><label>Your Name</label><input type="text" placeholder="Enter your name" autocomplete="name"></div>
+      <div class="form-group"><label>Email Address</label><input type="email" placeholder="your@email.com" autocomplete="email"></div>
+      <div class="form-group">
+        <label>Project Type</label>
+        <select>
+          <option value="" disabled selected>Select type</option>
+          <option>Short Film / Cinematic</option>
+          <option>VFX / Animation</option>
+          <option>3D Modelling</option>
+          <option>Creative Direction</option>
+          <option>Screenplay</option>
+          <option>Collaboration</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Message</label><textarea placeholder="Describe your project or idea..."></textarea></div>
+      <button class="btn-send" type="button">
+        Transmit Message
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-name">DARKUSHION STUDIOS</div>
+  <p class="footer-tag">"Where Shadows Tell Stories."</p>
+  <div class="footer-rule"></div>
+  <p class="footer-copy">© 2024 Kushal Kumar S &nbsp;·&nbsp; All Rights Reserved</p>
+</footer>
+
+</body>
+</html>
